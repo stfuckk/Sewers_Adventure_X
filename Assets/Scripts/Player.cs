@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -12,7 +11,8 @@ public class Player : MonoBehaviour
     [Space(20)]
 
     [Header("Настройки проверки земли")]
-    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Transform groundCheck1;
+    [SerializeField] private Transform groundCheck2;
     [SerializeField] private float groundCheckLen = .5f;
     [SerializeField] private LayerMask groundLayer;
     // Флаги
@@ -39,7 +39,6 @@ public class Player : MonoBehaviour
                 animator.SetBool("isJumping", false);
         }
     }
-
 
     // --- Основные функции ---
     // Функция проверяет нажатие клавиши, нахождение персонажа не в прыжке, и выполняет прыжок
@@ -77,7 +76,10 @@ public class Player : MonoBehaviour
 
     // функция, проверяющая, соприкасается ли персонаж с землей, чтобы обновить возможность прыжка
     private bool IsGrounded() {
-        RaycastHit2D hit = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckLen, groundLayer);
-        return hit.collider != null;
+        RaycastHit2D hit1 = Physics2D.Raycast(groundCheck1.position, Vector2.down, groundCheckLen, groundLayer);
+        RaycastHit2D hit2 = Physics2D.Raycast(groundCheck2.position, Vector2.down, groundCheckLen, groundLayer);
+        if (hit1.collider != null || hit2.collider != null)
+            return true;
+        else return false;
     }
 }
