@@ -8,12 +8,21 @@ public class Player : MonoBehaviour
     [SerializeField] private float rollingTime = .5f;
 
     [Space(20)]
-
+    
     [Header("Настройки проверки земли")]
     [SerializeField] private Transform groundCheck1;
     [SerializeField] private Transform groundCheck2;
     [SerializeField] private float groundCheckLen = .5f;
     [SerializeField] private LayerMask groundLayer;
+
+    [Space(20)]
+
+    [Header("Настройки проверки столкновения/смерти")]
+    [SerializeField] private Transform deadCheck1;
+    [SerializeField] private Transform deadCheck2;
+    [SerializeField] private float deadCheckLen = .5f;
+    [SerializeField] private LayerMask deadLayer;
+
     // Флаги
     private bool isRolling = false;
     private bool isJumping = false;
@@ -38,6 +47,7 @@ public class Player : MonoBehaviour
             if (rb.velocity.y == 0)
                 animator.SetBool("isJumping", false);
         }
+        IsDead();
     }
 
     // --- Основные функции ---
@@ -81,5 +91,13 @@ public class Player : MonoBehaviour
         if (hit1.collider != null || hit2.collider != null)
             return true;
         else return false;
+    }
+
+    // функция, проверяющая, соприкосается ли персонаж со стеной или ловушкой
+    private void IsDead() {
+        RaycastHit2D hit1 = Physics2D.Raycast(deadCheck1.position, Vector2.right, deadCheckLen, deadLayer);
+        RaycastHit2D hit2 = Physics2D.Raycast(deadCheck2.position, Vector2.right, deadCheckLen, deadLayer);
+        if (hit1.collider != null || hit2.collider != null)
+            isDead = true;
     }
 }
