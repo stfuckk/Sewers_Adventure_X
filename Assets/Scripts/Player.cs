@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -44,8 +45,7 @@ public class Player : MonoBehaviour
         CheckRoll();
         if (IsGrounded()) {
             isJumping = false;
-            if (rb.velocity.y == 0)
-                animator.SetBool("isJumping", false);
+            animator.SetBool("isJumping", false);
         }
         IsDead();
     }
@@ -53,13 +53,12 @@ public class Player : MonoBehaviour
     // --- Основные функции ---
     // Функция проверяет нажатие клавиши, нахождение персонажа не в прыжке, и выполняет прыжок
     private void CheckJump() {
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             if (!isJumping && IsGrounded())
-            {
-                isJumping = true;
+            {   
+                StartCoroutine(isJumpedDelay());
                 rb.velocity = Vector2.up * jumpForce;
-                animator.SetBool("isJumping", true);
             }
         }
     }
@@ -67,14 +66,11 @@ public class Player : MonoBehaviour
     // Функция проверяет нажатие клавиши, нахождение персонажа не в кувырке,
     // запуская анимацию кувырка и корутину, по истечению которой, кувырок прекращается
     private void CheckRoll() {
-        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && !isRolling && !isJumping)
         {
-            if (!isRolling && !isJumping)
-            {
-                isRolling = true;
-                animator.SetBool("isRolling", true);
-                StartCoroutine(Roll());
-            }
+            isRolling = true;
+            animator.SetBool("isRolling", true);
+            StartCoroutine(Roll());
         }
     }
     
@@ -93,11 +89,21 @@ public class Player : MonoBehaviour
         else return false;
     }
 
+    private IEnumerator isJumpedDelay() { // задержка для фикса зависания анимации прыжка
+        yield return new WaitForSeconds(0.1f);
+        isJumping = true;
+        animator.SetBool("isJumping", true);
+    }
+
     // функция, проверяющая, соприкосается ли персонаж со стеной или ловушкой
     private void IsDead() {
         RaycastHit2D hit1 = Physics2D.Raycast(deadCheck1.position, Vector2.right, deadCheckLen, deadLayer);
         RaycastHit2D hit2 = Physics2D.Raycast(deadCheck2.position, Vector2.right, deadCheckLen, deadLayer);
-        if (hit1.collider != null || hit2.collider != null)
+        if (hit1.collider != null || hit2.collider != null) {
             isDead = true;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation; // оставим замороженным только поворот тела, чтобы сымитировать отталкивание влево
+            animator.SetBool("isDead", isDead);
+            rb.velocity = 2f * jumpForce * Vector2.left;
+        }
     }
 }

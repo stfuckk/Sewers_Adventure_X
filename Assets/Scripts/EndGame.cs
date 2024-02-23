@@ -1,3 +1,4 @@
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,7 @@ public class EndGame : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private ScoreManager scoreManager;
+    [SerializeField] private new CinemachineVirtualCamera camera;
     [SerializeField] private Animator fadeScreenAnimator;
     [SerializeField] private Animator gameOverTextAnimator;
     [SerializeField] private Animator restartTextAnimator;
@@ -20,6 +22,13 @@ public class EndGame : MonoBehaviour
         if (player.isDead) {
             gameManager.enabled = false;
             scoreManager.enabled = false;
+            camera.enabled = false;
+            player.enabled = false;
+
+            // выключаем перемещение платформ
+            Chunk[] chunks = FindObjectsOfType<Chunk>();
+            foreach (Chunk chunk in chunks)
+                chunk.enabled = false;
             
             // запускаем анимации показа сообщения "Игра окончена"
             fadeScreenAnimator.SetTrigger("FadeIn");
