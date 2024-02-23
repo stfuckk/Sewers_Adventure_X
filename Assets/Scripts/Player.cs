@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -18,6 +17,7 @@ public class Player : MonoBehaviour
     // Флаги
     private bool isRolling = false;
     private bool isJumping = false;
+    public bool isDead = false;
 
     // Компоненты
     private Rigidbody2D rb;
