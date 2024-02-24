@@ -22,12 +22,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float maxSpeed = 10f;
     [SerializeField] private float acceleration = 0.05f;
 
+    [Space(10)]
+
+    [Header("Панель FadeOut")]
+    [SerializeField] private Animator fadeOutScreenAnimator;
+
     private GameObject currentPlatform1;
     private GameObject currentPlatform2;
     private GameObject currentPlatform3;
 
 
     void Start() {
+        fadeOutScreenAnimator.SetTrigger("FadeOut");
         SpawnStartPlatform();
         SpawnPlatform();
         speed = Mathf.Clamp(speed, 0f, maxSpeed);

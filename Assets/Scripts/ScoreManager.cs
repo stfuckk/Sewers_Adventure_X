@@ -29,7 +29,8 @@ public class ScoreManager : MonoBehaviour
             }
             UpdateScoreDisplay();
             Canvas.ForceUpdateCanvases();
-        }
+        } else
+            recordScoreText.text = "Рекорд: " + Math.Round(highScore).ToString();
     }
 
     private void ResetScore() {

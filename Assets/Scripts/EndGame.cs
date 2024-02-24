@@ -13,8 +13,7 @@ public class EndGame : MonoBehaviour
     [SerializeField] private Animator gameOverTextAnimator;
     [SerializeField] private Animator restartTextAnimator;
 
-    void Update()
-    {
+    void Update() {
         OnPlayerDied();
     }
 
@@ -36,7 +35,9 @@ public class EndGame : MonoBehaviour
             restartTextAnimator.SetTrigger("ShowText");
 
             if (Input.GetKeyDown(KeyCode.R))
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene("Game");
+            if (Input.GetKeyDown(KeyCode.Escape))
+                SceneManager.LoadScene("Main_Menu");
         }
     }
 }
