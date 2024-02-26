@@ -11,8 +11,10 @@ public class PauseController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
             TogglePause();
         
-        if (isPaused && Input.GetKeyDown(KeyCode.Q))
+        if (isPaused && Input.GetKeyDown(KeyCode.Q)) {
+            Time.timeScale = 1;
             SceneManager.LoadScene("Main_Menu");
+        }
     }
 
     private void TogglePause() {

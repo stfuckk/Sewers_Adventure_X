@@ -23,6 +23,10 @@ public class EndGame : MonoBehaviour
             scoreManager.enabled = false;
             camera.enabled = false;
             player.enabled = false;
+            GameObject []bgs = GameObject.FindGameObjectsWithTag("background");
+            foreach (var bg in bgs) {
+                bg.GetComponent<Parallax>().enabled = false;
+            }
 
             // выключаем перемещение платформ
             Chunk[] chunks = FindObjectsOfType<Chunk>();
